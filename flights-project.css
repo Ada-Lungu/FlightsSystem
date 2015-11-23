@@ -1,0 +1,55 @@
+.container-fluid {
+    background-color: dimgrey;
+}
+
+.day-square {
+    background: white;
+    width: 20vh;
+    height: 20vh;
+    float: left;
+    margin: 10px;
+    box-shadow: 0px 0px 5px grey;
+}
+
+.day-past {
+    background: #e8e8ee;
+}
+
+.booking_day {
+    background-color: greenyellow;
+}
+
+.circle {
+    border: 5px solid lightgreen;
+    width: 90%;
+    height: 90%;
+    margin: 5%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 50%;
+    color: lightgreen;
+    display: table;
+}
+
+.circle div {
+    display: table-cell;
+    vertical-align: middle;
+    margin: auto;
+    text-align: center;
+    font-family: ;
+    -ms-transform: rotate(-17deg); /* IE 9 */
+    -webkit-transform: rotate(-17deg); /* Chrome, Safari, Opera */
+    transform: rotate(-17deg);
+    font-family: 'Handlee', cursive;
+}
+
+.circle_red {
+    border: 5px solid darkred;
+    color: darkred;
+}
+
+#edit_flight, #delete_flight {
+    /*margin-right: 10px;*/
+    padding: 10px;
+}

@@ -1,0 +1,87 @@
+<div class="modal fade" id="myModal" data-flight-id="">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+
+                <!-- LOGIN FORM, IF USER NOT LOGGED IN YET, BEFORE BUYING TICKET-->
+                <div id="login_form">
+
+                    <h3>Please Login first:</h3>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input id="email" type="text" class="form-control" placeholder="Email" value="a@a" >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input id="password" type="password" class="form-control" placeholder="Password" value="999">
+                    </div>
+
+                    <button id="btn_login" class="btn btn-primary">Login</button>
+                </div>
+
+                <!-- TICKET INFO MODAL-->
+                <div id="ticket_info">
+                    <h4 class="modal-title">Your Flight Information</h4>
+                    <!--<p><span>First name:</span><span id="first_name"></span><span id="last_name"></span></p>-->
+                    <p id="full_name">Full name:<span></span></p>
+
+                    <p id="flight_from">From:<span></span></p>
+                    <p id="flight_to">To:<span></span></p></p>
+                    <p id="departure_time">Departure Time:<span></span></p>
+                    <p id="arrival_time">Arrival Time:<span></span></p>
+                </div>
+
+                <!-- FLIGHT'S INFOS SECTION IN BUY TICKET MODAL-->
+                <div id="flight_infos">
+                    <h4 class="modal-title">Your Flight Information</h4>
+                </div>
+
+                <!-- BUY TICKET FORM -->
+                <div id="payment_form">
+                    <!--<div class="component col-md-6" id="login_form">-->
+
+                        <h3>Buy the ticket</h3>
+                        <div class="form-group">
+                            <label for="name">First Name:</label>
+                            <input id="name" type="text" class="form-control" placeholder="First Name" >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="last_name">Last Name:</label>
+                            <input id="last_name" type="text" class="form-control" placeholder="Last Name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="card_num">Card Number:</label>
+                            <input id="card_num" type="text" class="form-control" placeholder="Card Number">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="expiration_date">Card Expiration Date:</label>
+                            <input id="expiration_date" type="datetime" class="form-control" placeholder="Expiration Date">
+                        </div>
+
+
+                        <div class="form-group">
+                                <label for="cvs">CVS:</label>
+                                <input id="cvs" type="text" class="form-control" placeholder="CVS">
+                        </div>
+
+                        <button id="btn_buy_ticket" class="btn btn-primary">Buy Ticket</button>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
