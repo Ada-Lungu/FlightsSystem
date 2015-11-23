@@ -52,7 +52,6 @@
     <div class="view container" id="my_flights" style="display: none">
     <!--    here we show the my bookings table-->
         <?php include 'components/user-bookings-display.html'; ?>
-
     </div>
 
     <div class="view container" id="settings" style="display: none">
@@ -62,7 +61,12 @@
     <div class="view container" id="admin_flights" style="display: none">
         <?php include 'components/admin_flights_display.html'; ?>
         <?php include 'components/modal-delete-flight.html'; ?>
+        <?php include 'components/create_flight.html'; ?>
     </div>
+
+<!--    <div class="view container" id="create_flight" style="display: none">-->
+<!--        --><?php //include 'components/create_flight.html'; ?>
+<!--    </div>-->
 
 </div>
 
@@ -614,13 +618,14 @@
         }).done(function(response) {
             console.log(response);
             for (var i=0; i<response.length; i++) {
-                $('#admin_flights_table tbody').append('<tr id="'+response[i].id+'"><td>' + response[i].flight_from + '</td>' +
-                    '<td>' + response[i].flight_to + '</td>' +
-                    '<td>' + response[i].flight_no + '</td>' +
-                    '<td>' + response[i].departure_time + '</td>' +
-                    '<td>' + response[i].arrival_time + '</td>' +
-                    '<td>' + response[i].economy_seats + '</td>' +
-                    '<td>' + response[i].business_seats + '</td>' +
+                $('#admin_flights_table tbody').append('<tr id="'+response[i].id+'"><td id="flight_from">' + response[i].flight_from + '</td>' +
+                    '<td id="flight_to">' + response[i].flight_to + '</td>' +
+                    '<td id="flight_no">' + response[i].flight_no + '</td>' +
+                    '<td id="departure_time">' + response[i].departure_time + '</td>' +
+                    '<td id="arrival_time">' + response[i].arrival_time + '</td>' +
+                    '<td id="price">' + response[i].price + '</td>' +
+                    '<td id="economy_seats">' + response[i].economy_seats + '</td>' +
+                    '<td id="business_setas">' + response[i].business_seats + '</td>' +
                     '<td><i id="edit_flight" data-flight-id="'+ response[i].id +'" class="fa fa-pencil"></i><i id="delete_flight" data-flight-id="'+ response[i].id +'" class="fa fa-trash-o"></i></td>' +
                     '</tr>')
             }
@@ -665,6 +670,105 @@
     });
 
 
+    // EDIT FLIGHT
+
+    $(document).on("click","#edit_flight", function() {
+        var flight_id = $(this).attr('data-flight-id');
+
+
+//      $('#admin_flights_table tbody tr#' + flight_id).html('<td><input type="text" value="'+response[i].flight_to+'">' + response[i].flight_to + '</td>');
+        var text_flight_from = $('#admin_flights_table tbody tr#' + flight_id + ' #flight_from').html();
+        var text_flight_to = $('#admin_flights_table tbody tr#' + flight_id + ' #flight_to').text();
+        var text_flight_no = $('#admin_flights_table tbody tr#' + flight_id + ' #flight_no').html();
+        var text_departure_time = $('#admin_flights_table tbody tr#' + flight_id + ' #departure_time').text();
+        var text_arrival_time = $('#admin_flights_table tbody tr#' + flight_id + ' #arrival_time').text();
+        var text_price = $('#admin_flights_table tbody tr#' + flight_id + ' #price').html();
+        var text_economy_seats = $('#admin_flights_table tbody tr#' + flight_id + ' #economy_seats').html();
+        var text_business_seats = $('#admin_flights_table tbody tr#' + flight_id + ' #business_seats').html();
+
+        console.log(text_flight_from);
+        $('#admin_flights_table tbody tr#' + flight_id + ' #flight_from').html($('<input />',{'value' : text_flight_from}).val(text_flight_from));
+        $('#admin_flights_table tbody tr#' + flight_id + ' #flight_to').html($('<input />',{'value' : text_flight_to}).val(text_flight_to));
+        $('#admin_flights_table tbody tr#' + flight_id + ' #flight_no').html($('<input />',{'value' : text_flight_no}).val(text_flight_no));
+        $('#admin_flights_table tbody tr#' + flight_id + ' #departure_time').html($('<input />',{'value' : text_departure_time}).val(text_departure_time));
+        $('#admin_flights_table tbody tr#' + flight_id + ' #arrival_time').html($('<input />',{'value' : text_arrival_time}).val(text_arrival_time));
+        $('#admin_flights_table tbody tr#' + flight_id + ' #price').html($('<input />',{'value' : text_price}).val(text_price));
+        $('#admin_flights_table tbody tr#' + flight_id + ' #economy_seats').html($('<input />',{'value' : text_economy_seats}).val(text_economy_seats));
+        $('#admin_flights_table tbody tr#' + flight_id + ' #business_seats').html($('<input />',{'value' : text_business_seats}).val(text_business_seats));
+
+        $('#admin_flights_table tbody tr#' + flight_id + ' #edit_flight').attr('class', 'fa fa-check-circle');
+        $(this).attr('id','save_edited_flight');
+
+
+    });
+
+
+
+    // SAVE EDITED FLIGHT
+    $(document).on("click","#save_edited_flight", function() {
+        icon_class = $(this).attr('class');
+        console.log(icon_class);
+
+        var flight_id = $(this).attr('data-flight-id');
+        var flight_from = $('#admin_flights_table tbody tr#' + flight_id + ' #flight_from input').val();
+        var flight_to = $('#admin_flights_table tbody tr#' + flight_id + ' #flight_to input').val();
+        var flight_no = $('#admin_flights_table tbody tr#' + flight_id + ' #flight_no input').val();
+        var departure_time = $('#admin_flights_table tbody tr#' + flight_id + ' #departure_time input').val();
+        var arrival_time = $('#admin_flights_table tbody tr#' + flight_id + ' #arrival_time input').val();
+        var price = $('#admin_flights_table tbody tr#' + flight_id + ' #price input').val();
+        var economy_seats = $('#admin_flights_table tbody tr#' + flight_id + ' #economy_seats input').val();
+        var business_seats = $('#admin_flights_table tbody tr#' + flight_id + ' #business_seats input').val();
+
+
+        console.log("Flight" + flight_from);
+
+        $.ajax('ajax.php', {
+            data: {"action": "edit_flight", "flight_id": flight_id, "flight_from": flight_from,
+                    "flight_to": flight_to, "flight_no": flight_no, "departure_time": departure_time,
+                    "arrival_time": arrival_time, "price": price, "economy_seats":economy_seats,
+                    "business_seats": business_seats},
+            dataType: 'json'
+
+        }).done(function (response) {
+            if (response.result = 'ok') {
+                console.log("Dates updated in DB");
+
+                $('#admin_flights_table tbody tr#' + flight_id + ' #flight_from').html(flight_from);
+//                $('#admin_flights_table tbody tr#' + flight_id + ' #flight_to').html($('<input />',{'value' : text_flight_to}).val(text_flight_to));
+//                $('#admin_flights_table tbody tr#' + flight_id + ' #flight_no').html($('<input />',{'value' : text_flight_no}).val(text_flight_no));
+//                $('#admin_flights_table tbody tr#' + flight_id + ' #departure_time').html($('<input />',{'value' : text_departure_time}).val(text_departure_time));
+//                $('#admin_flights_table tbody tr#' + flight_id + ' #arrival_time').html($('<input />',{'value' : text_arrival_time}).val(text_arrival_time));
+//                $('#admin_flights_table tbody tr#' + flight_id + ' #price').html($('<input />',{'value' : text_price}).val(text_price));
+//                $('#admin_flights_table tbody tr#' + flight_id + ' #economy_seats').html($('<input />',{'value' : text_economy_seats}).val(text_economy_seats));
+//                $('#admin_flights_table tbody tr#' + flight_id + ' #business_seats').html($('<input />',{'value' : text_business_seats}).val(text_business_seats));
+//
+//                $('#admin_flights_table tbody tr#' + flight_id + ' #edit_flight').attr('class', 'fa fa-check-circle');
+
+
+            }
+
+        }).fail(function (response) {
+            console.log(response);
+
+        });
+    });
+
+
+    // CREATE FLIGHT
+
+    $(document).on("click","#create_flight", function() {
+
+        $('#login_form').hide();
+//        $('#admin_flights.view').hide();
+//        $('#create_flight.view').show();
+//        $('#admin_flights_table').hide();
+        $('#create_flight_form').show();
+
+
+
+
+
+    });
 
 </script>
 

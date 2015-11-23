@@ -285,13 +285,14 @@
 
 
     // EDIT FLIGHT
-    function editFlight($flight_id, $flight_no, $flight_from, $flight_to, $departure_time, $arrival_time, $price, $economy_seats, $business_seats)
+    function editFlight($flight_id, $flight_no, $flight_from, $flight_to,
+                        $departure_time, $arrival_time, $price, $economy_seats, $business_seats)
     {
         include 'db.php';
         $query = $conn->prepare("UPDATE flights SET flight_no=:flight_no, flight_from=:flight_from,
                                     flight_to=:flight_to, departure_time=:departure_time,
                                     arrival_time=:arrival_time, price=:price,
-                                    economy_seats=:economy_seats, business_seats=:business_seats
+                                    business_seats=:business_seats, economy_seats=:economy_seats
                                     WHERE id=:flight_id");
 
         $query->bindParam(':flight_id', $flight_id);
@@ -302,8 +303,7 @@
         $query->bindParam(':arrival_time', $arrival_time);
         $query->bindParam(':price', $price);
         $query->bindParam(':economy_seats', $economy_seats);
-        $query->bindParam(':businee_seats', $business_seats);
-
+        $query->bindParam(':business_seats', $business_seats);
 
         $query->execute();
         $affected_rows = $query->rowCount();
@@ -316,6 +316,39 @@
 
     }
 
+
+    // CREATE FLIGHT
+
+    function createFlight($flight_no, $flight_from, $flight_to,
+                          $departure_time, $arrival_time, $price, $economy_seats, $business_seats)
+    {
+        include 'db.php';
+        $query = $conn->prepare("INSERT INTO flights (flight_no, flight_from,
+                                    flight_to, departure_time,
+                                    arrival_time, price,
+                                    economy_seats, business_seats)
+                                    VALUES(:flight_no, :flight_from, :flight_to, :departure_time, :arrival_time, :price, :economy_seats, :business_seats)
+                                    ");
+
+        $query->bindParam(':flight_no', $flight_no);
+        $query->bindParam(':flight_from', $flight_from);
+        $query->bindParam(':flight_to', $flight_to);
+        $query->bindParam(':departure_time', $departure_time);
+        $query->bindParam(':arrival_time', $arrival_time);
+        $query->bindParam(':price', $price);
+        $query->bindParam(':economy_seats', $economy_seats);
+        $query->bindParam(':business_seats', $business_seats);
+
+        $query->execute();
+        $affected_rows = $query->rowCount();
+
+        if ($affected_rows == 1) {
+            echo '{"result":"ok"}';
+        }else {
+            echo '{"result":"error"}';
+        }
+
+    }
 
 
 

@@ -49,7 +49,29 @@
     color: darkred;
 }
 
-#edit_flight, #delete_flight {
+#edit_flight, #delete_flight, #save_edited_flight {
     /*margin-right: 10px;*/
     padding: 10px;
 }
+
+/*NAVBAR*/
+
+/*body {*/
+    /*background-color: lightgrey;*/
+/*}*/
+
+/*.container {*/
+    /*background-color: white;*/
+
+/*}*/
+
+/*.page-header#header {*/
+    /*background-color: rgb(226, 49, 48);*/
+    /*height: 60px;*/
+    /*color: white;*/
+/*}*/
+
+/*.container-fluid {*/
+    /*color: white;*/
+    /*background-color: rgb(226, 49, 48);*/
+/*}*/

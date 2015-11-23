@@ -67,8 +67,20 @@
     }
 
     if($action == 'edit_flight') {
-        editFlight($_GET['flight_id']);
+        editFlight(
+            $_GET['flight_id'], $_GET['flight_no'],
+            $_GET['flight_from'], $_GET['flight_to'],
+            $_GET['departure_time'], $_GET['arrival_time'],
+            $_GET['price'], $_GET['economy_seats'], $_GET['business_seats']
+        );
     }
 
+    if($action == 'create_flight') {
+        createFlight($_GET['flight_no'],
+            $_GET['flight_from'], $_GET['flight_to'],
+            $_GET['departure_time'], $_GET['arrival_time'],
+            $_GET['price'], $_GET['economy_seats'], $_GET['business_seats']
+        );
+    }
 
 ?>
