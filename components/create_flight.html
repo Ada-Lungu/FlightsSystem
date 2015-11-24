@@ -2,14 +2,17 @@
 <div class="component col-md-6" id="create_flight_form">
 
     <h3>CREATE FLIGHT</h3>
+
     <div class="form-group">
-        <label for="flight_from">Flight From:</label>
-        <input id="flight_from" type="text" class="form-control" placeholder="City Name">
+        <label for="cities_from">Flight From:</label>
+        <select class="form-control" id="cities_from">
+        </select>
     </div>
 
     <div class="form-group">
-        <label for="flight_to">Flight To:</label>
-        <input id="flight_to" type="text" class="form-control" placeholder="City Name">
+        <label for="cities_to">Flight To:</label>
+        <select class="form-control" id="cities_to">
+        </select>
     </div>
 
     <div class="form-group">
@@ -42,6 +45,6 @@
         <input id="business_seats" type="text" class="form-control" placeholder="No Business Seats">
     </div>
 
-    <button id="btn_signup" class="btn btn-primary">Create Flight</button>
+    <button id="btn_create_flight" class="btn btn-primary">Create Flight</button>
 
 </div>

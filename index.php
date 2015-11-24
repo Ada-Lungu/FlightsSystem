@@ -59,9 +59,10 @@
     </div>
 
     <div class="view container" id="admin_flights" style="display: none">
+        <?php include 'components/create_flight.html'; ?>
         <?php include 'components/admin_flights_display.html'; ?>
         <?php include 'components/modal-delete-flight.html'; ?>
-        <?php include 'components/create_flight.html'; ?>
+        <?php include 'components/passengers-table.html'; ?>
     </div>
 
 <!--    <div class="view container" id="create_flight" style="display: none">-->
@@ -96,16 +97,27 @@
             data: {"action":"is_user_logged_in"}
         }).done(function(response){
             console.log(response);
-            if(response.result == "ok"){
+            $('#header').hide();
+            $('#search_flights').hide();
+            $('.admin_header').show();
+            $('#admin_flights_table').show();
+            $('#admin_flights').show();
+
+            if(response.result == "ok" && response.is_admin == '1'){
+                console.log(response);
                 $('.menu_item').show();
                 $('#login_header .text').html('Log Out');
                 $('#login_header').attr('data-button', 'logout');
+            }
+            else if(response.result == "ok" && response.is_admin == '0'){
+
             }
 
         }).fail(function(response){
             console.log(response)
         })
     }
+
 
 
 //  SEARCH BUTTON + CREATE FLIGHTS TABLE
@@ -282,8 +294,6 @@
 
 //                  $('#header #flights_header').attr('data-item','admin_flights');
 //                  $('#header #settings_header').attr('data-item','admin_settings');
-
-
             }
 
         }).fail(function (response) {
@@ -610,31 +620,13 @@
 
         $('#login_form').hide();
         $('#admin_flights.view').show();
+        $('#admin_flights_table').show();
+        $('#create_flight_form').hide();
 //        $('.admin_header').show();
 
-        $.ajax('ajax.php', {
-            data: {"action":"get_all_flights"},
-            dataType:'json'
-        }).done(function(response) {
-            console.log(response);
-            for (var i=0; i<response.length; i++) {
-                $('#admin_flights_table tbody').append('<tr id="'+response[i].id+'"><td id="flight_from">' + response[i].flight_from + '</td>' +
-                    '<td id="flight_to">' + response[i].flight_to + '</td>' +
-                    '<td id="flight_no">' + response[i].flight_no + '</td>' +
-                    '<td id="departure_time">' + response[i].departure_time + '</td>' +
-                    '<td id="arrival_time">' + response[i].arrival_time + '</td>' +
-                    '<td id="price">' + response[i].price + '</td>' +
-                    '<td id="economy_seats">' + response[i].economy_seats + '</td>' +
-                    '<td id="business_setas">' + response[i].business_seats + '</td>' +
-                    '<td><i id="edit_flight" data-flight-id="'+ response[i].id +'" class="fa fa-pencil"></i><i id="delete_flight" data-flight-id="'+ response[i].id +'" class="fa fa-trash-o"></i></td>' +
-                    '</tr>')
-            }
-        }).fail(function(response) {
-            console.log(response);
-        });
+       getAllAdminFlights();
 
     });
-
 
 
     // DELETE FLIGHT
@@ -675,6 +667,9 @@
     $(document).on("click","#edit_flight", function() {
         var flight_id = $(this).attr('data-flight-id');
 
+        getAirports('#admin_flights_table tbody tr#' + flight_id + ' #flight_from #cities_from',
+            '#admin_flights_table tbody tr#' + flight_id + ' #flight_to #cities_to');
+
 
 //      $('#admin_flights_table tbody tr#' + flight_id).html('<td><input type="text" value="'+response[i].flight_to+'">' + response[i].flight_to + '</td>');
         var text_flight_from = $('#admin_flights_table tbody tr#' + flight_id + ' #flight_from').html();
@@ -686,15 +681,15 @@
         var text_economy_seats = $('#admin_flights_table tbody tr#' + flight_id + ' #economy_seats').html();
         var text_business_seats = $('#admin_flights_table tbody tr#' + flight_id + ' #business_seats').html();
 
-        console.log(text_flight_from);
-        $('#admin_flights_table tbody tr#' + flight_id + ' #flight_from').html($('<input />',{'value' : text_flight_from}).val(text_flight_from));
-        $('#admin_flights_table tbody tr#' + flight_id + ' #flight_to').html($('<input />',{'value' : text_flight_to}).val(text_flight_to));
-        $('#admin_flights_table tbody tr#' + flight_id + ' #flight_no').html($('<input />',{'value' : text_flight_no}).val(text_flight_no));
-        $('#admin_flights_table tbody tr#' + flight_id + ' #departure_time').html($('<input />',{'value' : text_departure_time}).val(text_departure_time));
-        $('#admin_flights_table tbody tr#' + flight_id + ' #arrival_time').html($('<input />',{'value' : text_arrival_time}).val(text_arrival_time));
-        $('#admin_flights_table tbody tr#' + flight_id + ' #price').html($('<input />',{'value' : text_price}).val(text_price));
-        $('#admin_flights_table tbody tr#' + flight_id + ' #economy_seats').html($('<input />',{'value' : text_economy_seats}).val(text_economy_seats));
-        $('#admin_flights_table tbody tr#' + flight_id + ' #business_seats').html($('<input />',{'value' : text_business_seats}).val(text_business_seats));
+       // console.log($('#admin_flights_table tbody tr#' + flight_id + ' #flight_from'));
+        $('#admin_flights_table tbody tr#' + flight_id + ' #flight_from').html('<select class="form-control" id="cities_from"></select>');
+        $('#admin_flights_table tbody tr#' + flight_id + ' #flight_to').html('<select class="form-control" id="cities_to"></select>');
+        $('#admin_flights_table tbody tr#' + flight_id + ' #flight_no').html($('<input size="10"/>',{'value' : text_flight_no}).val(text_flight_no));
+        $('#admin_flights_table tbody tr#' + flight_id + ' #departure_time').html($('<input size="20"/>',{'value' : text_departure_time}).val(text_departure_time));
+        $('#admin_flights_table tbody tr#' + flight_id + ' #arrival_time').html($('<input size="20"/>',{'value' : text_arrival_time}).val(text_arrival_time));
+        $('#admin_flights_table tbody tr#' + flight_id + ' #price').html($('<input size="5"/>',{'value' : text_price}).val(text_price));
+        $('#admin_flights_table tbody tr#' + flight_id + ' #economy_seats').html($('<input size="5"/>',{'value' : text_economy_seats}).val(text_economy_seats));
+        $('#admin_flights_table tbody tr#' + flight_id + ' #business_seats').html($('<input size="5"/>',{'value' : text_business_seats}).val(text_business_seats));
 
         $('#admin_flights_table tbody tr#' + flight_id + ' #edit_flight').attr('class', 'fa fa-check-circle');
         $(this).attr('id','save_edited_flight');
@@ -706,12 +701,17 @@
 
     // SAVE EDITED FLIGHT
     $(document).on("click","#save_edited_flight", function() {
-        icon_class = $(this).attr('class');
-        console.log(icon_class);
+        var icon_class = $(this).attr('class');
+        //console.log(icon_class);
 
         var flight_id = $(this).attr('data-flight-id');
-        var flight_from = $('#admin_flights_table tbody tr#' + flight_id + ' #flight_from input').val();
-        var flight_to = $('#admin_flights_table tbody tr#' + flight_id + ' #flight_to input').val();
+        var flight_from = $('#admin_flights_table tbody tr#' + flight_id + ' #flight_from #cities_from option:selected').attr('data-code');
+        var flight_to = $('#admin_flights_table tbody tr#' + flight_id + ' #flight_to #cities_to option:selected').attr('data-code');
+
+        var city_from = $('#admin_flights_table tbody tr#' + flight_id + ' #flight_from #cities_from option:selected').attr('data-city');
+        var city_to = $('#admin_flights_table tbody tr#' + flight_id + ' #flight_to #cities_to option:selected').attr('data-city');
+
+
         var flight_no = $('#admin_flights_table tbody tr#' + flight_id + ' #flight_no input').val();
         var departure_time = $('#admin_flights_table tbody tr#' + flight_id + ' #departure_time input').val();
         var arrival_time = $('#admin_flights_table tbody tr#' + flight_id + ' #arrival_time input').val();
@@ -720,7 +720,7 @@
         var business_seats = $('#admin_flights_table tbody tr#' + flight_id + ' #business_seats input').val();
 
 
-        console.log("Flight" + flight_from);
+
 
         $.ajax('ajax.php', {
             data: {"action": "edit_flight", "flight_id": flight_id, "flight_from": flight_from,
@@ -733,17 +733,17 @@
             if (response.result = 'ok') {
                 console.log("Dates updated in DB");
 
-                $('#admin_flights_table tbody tr#' + flight_id + ' #flight_from').html(flight_from);
-//                $('#admin_flights_table tbody tr#' + flight_id + ' #flight_to').html($('<input />',{'value' : text_flight_to}).val(text_flight_to));
-//                $('#admin_flights_table tbody tr#' + flight_id + ' #flight_no').html($('<input />',{'value' : text_flight_no}).val(text_flight_no));
-//                $('#admin_flights_table tbody tr#' + flight_id + ' #departure_time').html($('<input />',{'value' : text_departure_time}).val(text_departure_time));
-//                $('#admin_flights_table tbody tr#' + flight_id + ' #arrival_time').html($('<input />',{'value' : text_arrival_time}).val(text_arrival_time));
-//                $('#admin_flights_table tbody tr#' + flight_id + ' #price').html($('<input />',{'value' : text_price}).val(text_price));
-//                $('#admin_flights_table tbody tr#' + flight_id + ' #economy_seats').html($('<input />',{'value' : text_economy_seats}).val(text_economy_seats));
-//                $('#admin_flights_table tbody tr#' + flight_id + ' #business_seats').html($('<input />',{'value' : text_business_seats}).val(text_business_seats));
-//
-//                $('#admin_flights_table tbody tr#' + flight_id + ' #edit_flight').attr('class', 'fa fa-check-circle');
+                $('#admin_flights_table tbody tr#' + flight_id + ' #flight_from').html(city_from);
+                $('#admin_flights_table tbody tr#' + flight_id + ' #flight_to').html(city_to);
+                $('#admin_flights_table tbody tr#' + flight_id + ' #flight_no').html(flight_no);
+                $('#admin_flights_table tbody tr#' + flight_id + ' #departure_time').html(departure_time);
+                $('#admin_flights_table tbody tr#' + flight_id + ' #arrival_time').html(arrival_time);
+                $('#admin_flights_table tbody tr#' + flight_id + ' #price').html(price);
+                $('#admin_flights_table tbody tr#' + flight_id + ' #economy_seats').html(economy_seats);
+                $('#admin_flights_table tbody tr#' + flight_id + ' #business_seats').html(business_seats);
 
+                $('#admin_flights_table tbody tr#' + flight_id + ' #save_edited_flight').attr('class', 'fa fa-pencil');
+                $('#admin_flights_table tbody tr#' + flight_id + ' #save_edited_flight').attr('id', 'edit_flight');
 
             }
 
@@ -753,22 +753,208 @@
         });
     });
 
+    function getAirports(append_from, append_to){
+        $.ajax('ajax.php', {
+            data: {"action":"get_airports"},
+            dataType: 'json'
+        }).done(function(response){
+            $(append_from).html('');
+            $(append_to).html('');
+            console.log(response);
+            for (var i=0; i<response.length; i++) {
+                var city = '<option data-city="'+response[i].city_name+'" data-code="'+ response[i].code +'">'+ response[i].city_name + ' ' + response[i].code + '</option>';
+                $(append_from).append(city);
+                $(append_to).append(city);
+            }
+
+            }).fail(function(response){
+
+
+         });
+    }
+
+
+    // SHOW CREATE FLIGHT FORM
+    $(document).on("click","#show_create_flight_form", function() {
+        getAirports('#cities_from', '#cities_to');
+        getAllAdminFlights();
+        $('#login_form').hide();
+        $('#admin_flights_table').hide();
+        $('#create_flight_form').show();
+    });
 
     // CREATE FLIGHT
 
-    $(document).on("click","#create_flight", function() {
+    $(document).on("click","#btn_create_flight", function() {
+        var flight_no = $('#create_flight_form #flight_no').val();
+        var flight_from = $('#create_flight_form #cities_from option:selected').attr('data-code');
+        var flight_to = $('#create_flight_form #cities_to option:selected').attr('data-code');
+        var departure_time = $('#create_flight_form #departure_time').val();
+        var arrival_time = $('#create_flight_form #arrival_time').val();
+        var price = $('#create_flight_form #price').val();
+        var economy = $('#create_flight_form #economy_seats').val();
+        var business = $('#create_flight_form #business_seats').val();
 
-        $('#login_form').hide();
-//        $('#admin_flights.view').hide();
-//        $('#create_flight.view').show();
-//        $('#admin_flights_table').hide();
-        $('#create_flight_form').show();
 
+        console.log(flight_from);
+        $.ajax('ajax.php', {
+            data: {"action":"create_flight",
+                   "flight_no":flight_no,
+                   "flight_from":flight_from,
+                   "flight_to":flight_to,
+                   "departure_time":departure_time,
+                   "arrival_time":arrival_time,
+                   "price":price,
+                   "economy_seats":economy,
+                   "business_seats":business},
+            dataType: 'json'
 
+        }).done(function(response) {
+            console.log(response);
+            $('#create_flight_form').fadeOut(300, function(){
+                $('#admin_flights_table').fadeIn(300, function(){
+                    var row = '<tr style="opacity: 0" id="'+response.id+'"><td id="flight_from">' + response.flight_from + '</td>' +
+                        '<td id="flight_to">' + response.flight_to + '</td>' +
+                        '<td id="flight_no">' + response.flight_no + '</td>' +
+                        '<td id="departure_time">' + response.departure_time + '</td>' +
+                        '<td id="arrival_time">' + response.arrival_time + '</td>' +
+                        '<td id="price">' + response.price + '</td>' +
+                        '<td id="economy_seats">' + response.economy_seats + '</td>' +
+                        '<td id="business_seats">' + response.business_seats + '</td>' +
 
+//                    '<td id="passengers"><i class="fa fa-users"></i></td>' +
+                        '<td><i id="passengers" data-flight-id="'+ response.id +'" class="fa fa-users"></i></td>' +
+                        '<td><i id="edit_flight" data-flight-id="'+ response.id +'" class="fa fa-pencil"></i><i id="delete_flight" data-flight-id="'+ response.id +'" class="fa fa-trash-o"></i></td>' +
+                        '</tr>';
+                    $('#admin_flights_table tbody').prepend(row);
+                    console.log($('#'+response.id));
+                    $('#'+response.id).animate({'opacity':1}, 1000);
 
+                })
+
+            });
+        }).fail(function(response) {
+            console.log(response);
+        });
 
     });
+
+
+    // SEE PASSENGERS LIST
+    $(document).on("click","#passengers", function() {
+       var flight_id = $(this).attr('data-flight-id');
+
+//        $('#admin_flights_table').slideUp(500, function(){
+//            $('#passengers_table').slideDown(500);
+//        });
+
+        $('#admin_flights_table').animate({"opacity": 0, "margin-top": "-=30px"}, 300 , function(){
+            $('#admin_flights_table').css('display', 'none');
+            $('#passengers_table').css('display', 'block');
+            $('#passengers_table').animate({"opacity": 1, "margin-top": "+=30px"}, 300);
+        });
+
+
+        $.ajax('ajax.php', {
+            data: {"action":"get_passengers", "flight_id": flight_id},
+            dataType: 'json'
+
+        }).done(function(response) {
+            console.log(response);
+
+            for (var i=0; i< response.length; i++) {
+
+                var row = '<tr id="'+response[i].booking_id+'"><td>'+ response[i].first_name+'</td>' +
+                    '<td>'+ response[i].last_name+'</td>' +
+                    '<td>'+ response[i].email+'</td>' +
+                    '<td>'+ response[i].phone_num+'</td>' +
+                    '<td><i data-booking-id ="'+ response[i].booking_id +'" class="fa fa-ban"></i></td></tr>';
+
+                $('#passengers_table tbody').append(row);
+            }
+
+
+        }).fail(function(response) {
+            console.log(response);
+        });
+
+    });
+
+
+    // CANCEL BOOKING
+    $(document).on("click",".fa-ban", function() {
+        var booking_id = $(this).attr('data-booking-id');
+        console.log(booking_id);
+
+        $.ajax('ajax.php', {
+            data: {"action":"cancel_booking", "booking_id":booking_id},
+            dataType: 'json'
+
+        }).done(function(response) {
+            if(response.result == 'ok'){
+
+                $('#passengers_table #'+booking_id).fadeOut(300, function(){
+                    $('#passengers_table #'+booking_id).remove();
+                })
+
+            }
+
+        }).fail(function() {
+
+        });
+    });
+
+    //GO BACK TO FLIGHTS LIST FROM PASSENGER LIST
+    $(document).on("click","#btn_back_to_flights", function() {
+        $('#passengers_table').animate({"opacity": 0, "margin-top": "-=30px"}, 300 , function(){
+            $('#passengers_table').css('display', 'none');
+            $('#admin_flights_table').css('display', 'block');
+            $('#admin_flights_table').animate({"opacity": 1, "margin-top": "+=30px"}, 300);
+        });
+    });
+
+    function getAllAdminFlights(){
+        $.ajax('ajax.php', {
+            data: {"action":"get_all_flights"},
+            dataType:'json'
+        }).done(function(response) {
+            console.log(response);
+            for (var i=0; i<response.length; i++) {
+                $('#admin_flights_table tbody').append('<tr id="'+response[i].id+'"><td id="flight_from">' + response[i].departure_city + '</td>' +
+                    '<td id="flight_to">' + response[i].arrival_city + '</td>' +
+                    '<td id="flight_no">' + response[i].flight_no + '</td>' +
+                    '<td id="departure_time">' + response[i].departure_time + '</td>' +
+                    '<td id="arrival_time">' + response[i].arrival_time + '</td>' +
+                    '<td id="price">' + response[i].price + '</td>' +
+                    '<td id="economy_seats">' + response[i].economy_seats + '</td>' +
+                    '<td id="business_seats">' + response[i].business_seats + '</td>' +
+
+//                    '<td id="passengers"><i class="fa fa-users"></i></td>' +
+                    '<td><i id="passengers" data-flight-id="'+ response[i].id +'" class="fa fa-users"></i></td>' +
+                    '<td><i id="edit_flight" data-flight-id="'+ response[i].id +'" class="fa fa-pencil"></i><i id="delete_flight" data-flight-id="'+ response[i].id +'" class="fa fa-trash-o"></i></td>' +
+                    '</tr>')
+            }
+        }).fail(function(response) {
+            console.log(response);
+        });
+    }
+
+
+    function test(){
+        $.ajax('ajax.php', {
+            data: {"action":"create_flight",
+                "flight_no":'1',
+                "flight_from":'AAA',
+                "flight_to":'BBB',
+                "departure_time":'1',
+                "arrival_time":'1',
+                "price":'1',
+                "economy_seats":'1',
+                "business_seats":'1'},
+            dataType: 'json'
+
+        }).done(function(response) {console.log(response)}).fail(function(response) {console.log(response)})
+    }
 
 </script>
 

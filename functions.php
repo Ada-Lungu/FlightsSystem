@@ -258,7 +258,11 @@
     function getAdminAllFlights() {
 
         include 'db.php';
-        $query = $conn->prepare('SELECT * FROM flights');
+        $query = $conn->prepare("SELECT flights.*, airports1.city_name AS departure_city, airports2.city_name AS arrival_city FROM flights
+                                LEFT JOIN airports as airports1
+                                ON flights.flight_to = airports1.code
+                                LEFT JOIN airports as airports2
+                                ON flights.flight_from = airports2.code");
         $query->execute();
 
         $all_flights = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -340,17 +344,54 @@
         $query->bindParam(':business_seats', $business_seats);
 
         $query->execute();
-        $affected_rows = $query->rowCount();
+        $last_id = $conn->lastInsertId();
 
-        if ($affected_rows == 1) {
-            echo '{"result":"ok"}';
-        }else {
+        $query = $conn->prepare("SELECT * FROM flights WHERE id = $last_id");
+        $query->execute();
+        $result = $query->fetchAll(PDO::FETCH_ASSOC)[0];
+
+
+        if (count($result) == 0) {
             echo '{"result":"error"}';
+        }else {
+            echo json_encode($result);
         }
 
     }
 
+    // GET PASSENGERS
 
+    function getPassengers($flight_id) {
+        include 'db.php';
+        $query = $conn->prepare ("SELECT users.*, bookings.id AS booking_id FROM bookings
+                                JOIN users
+                                ON bookings.user_id = users.id
+                                WHERE bookings.flight_id =:flight_id");
+
+        $query->bindParam(':flight_id', $flight_id);
+        $query->execute();
+        $passengers =  $query->fetchAll(PDO::FETCH_ASSOC);
+
+        echo json_encode($passengers);
+
+    }
+
+    function cancelBooking($booking_id){
+        include 'db.php';
+        $query = $conn->prepare("DELETE FROM bookings WHERE id = :booking_id");
+        $query->bindParam(':booking_id', $booking_id);
+        $query->execute();
+        echo '{"result":"ok"}';
+    }
+
+
+    function getAirports(){
+        include 'db.php';
+        $query = $conn->prepare("SELECT * FROM airports");
+        $query->execute();
+        $result = $query->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($result);
+    }
 
 ?>
 

@@ -3,6 +3,19 @@
     include 'db.php';
     include 'functions.php';
 
+// CLEAN AJAX
+//$.ajax('ajax.php', {
+//            data: {"action":"},
+//            dataType: 'json'
+//
+//        }).done(function(response) {
+//
+//
+//        }).fail(function() {
+//
+//        });
+
+
     $action = $_GET['action'];
 
     if($action == 'login'){
@@ -77,10 +90,28 @@
 
     if($action == 'create_flight') {
         createFlight($_GET['flight_no'],
-            $_GET['flight_from'], $_GET['flight_to'],
-            $_GET['departure_time'], $_GET['arrival_time'],
-            $_GET['price'], $_GET['economy_seats'], $_GET['business_seats']
+                    $_GET['flight_from'],
+                    $_GET['flight_to'],
+                    $_GET['departure_time'],
+                    $_GET['arrival_time'],
+                    $_GET['price'],
+                    $_GET['economy_seats'],
+                    $_GET['business_seats']
         );
     }
+
+    if($action == 'get_passengers') {
+        getPassengers($_GET['flight_id']);
+    }
+
+    if($action == 'cancel_booking') {
+        cancelBooking($_GET['booking_id']);
+    }
+
+    if($action == 'get_airports') {
+        getAirports();
+    }
+
+
 
 ?>
