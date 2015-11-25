@@ -34,10 +34,11 @@
 
 
 
-<div class="container">
+<!--<div class="container">-->
 
     <?php include 'components/header.html'; ?>
     <?php include 'components/header_admin.html'; ?>
+
     <div class="view" id="home">
         <?php include 'components/user-page.html'; ?>
         <?php include 'components/admin-page.html'; ?>
@@ -65,11 +66,13 @@
         <?php include 'components/passengers-table.html'; ?>
     </div>
 
+    <img id="background-img" src="http://thumbs.dreamstime.com/z/world-travel-map-air-planes-illustration-36073514.jpg">
+
 <!--    <div class="view container" id="create_flight" style="display: none">-->
 <!--        --><?php //include 'components/create_flight.html'; ?>
 <!--    </div>-->
 
-</div>
+<!--</div>-->
 
 
 <!-- JQuery -->
@@ -97,11 +100,12 @@
             data: {"action":"is_user_logged_in"}
         }).done(function(response){
             console.log(response);
-            $('#header').hide();
-            $('#search_flights').hide();
-            $('.admin_header').show();
+            $('#header').show();
+            $('#flights_table').hide();
+            $('#search_flights').show();
+            $('.admin_header').hide();
             $('#admin_flights_table').show();
-            $('#admin_flights').show();
+            $('#admin_flights.view').hide();
 
             if(response.result == "ok" && response.is_admin == '1'){
                 console.log(response);
@@ -214,11 +218,13 @@
 
     // DISPLAY LOGIN/LOGOUT
 
-    $(document).on('click', '#login_header', function() {
+    $(document).on('click', '#login_header' , function() {
         var button_type = $(this).attr('data-button');
+        // if data-button is login
         if(button_type == 'login'){
             $('#login_form').show();
             $('#search_flights').hide();
+
         }
         // PERFORM LOGOUT
         else {
@@ -229,14 +235,20 @@
 
                 console.log(response.result);
 
-                $('#login_header').show();
+//               $('#login_header').show();
                 $('#sign_up_header').hide();
-                $('#logout_header').attr('id', '#login_header');
+
                 $('.menu_item').not('#home').hide();
                 $('*[data-item="home"]').show();
 
+                $('#search_flights').show();
                 $('#login_header').attr('data-button','login');
-                $('#login_header .text').html('Login');
+                $('#login_header span.text').text('Login');
+
+                $('#edit_user_form').hide();
+
+                $('#logout_header').attr('id', '#login_header');
+
                 // CHANGE logout button back to login button + attributes
                 // show the search flights form
 
@@ -247,6 +259,13 @@
 
         }
 
+    });
+
+
+    //
+
+    $(document).on('click', '#home_header', function() {
+        $('#search_flights').show();
     });
 
 
@@ -266,7 +285,9 @@
 
             $('#login_header .text').html('Log Out');
             $('#login_header').attr('data-button', 'logout');
+            $('#flights_table').hide();
             $('.menu_item').show();
+
 
             // For Users
             if (response.is_admin == 0) {
@@ -616,17 +637,20 @@
     // ADMIN
     // SHOW ALL FLIGHTS
     $(document).on("click","#list_flights", function() {
-//       delete the already there table
+//      delete the already there table
+
+        $('#admin_flights_table tbody').html('');
 
         $('#login_form').hide();
         $('#admin_flights.view').show();
         $('#admin_flights_table').show();
         $('#create_flight_form').hide();
-//        $('.admin_header').show();
+//      $('.admin_header').show();
 
        getAllAdminFlights();
 
     });
+
 
 
     // DELETE FLIGHT
@@ -660,6 +684,7 @@
         });
 
     });
+
 
 
     // EDIT FLIGHT
@@ -721,7 +746,6 @@
 
 
 
-
         $.ajax('ajax.php', {
             data: {"action": "edit_flight", "flight_id": flight_id, "flight_from": flight_from,
                     "flight_to": flight_to, "flight_no": flight_no, "departure_time": departure_time,
@@ -753,25 +777,6 @@
         });
     });
 
-    function getAirports(append_from, append_to){
-        $.ajax('ajax.php', {
-            data: {"action":"get_airports"},
-            dataType: 'json'
-        }).done(function(response){
-            $(append_from).html('');
-            $(append_to).html('');
-            console.log(response);
-            for (var i=0; i<response.length; i++) {
-                var city = '<option data-city="'+response[i].city_name+'" data-code="'+ response[i].code +'">'+ response[i].city_name + ' ' + response[i].code + '</option>';
-                $(append_from).append(city);
-                $(append_to).append(city);
-            }
-
-            }).fail(function(response){
-
-
-         });
-    }
 
 
     // SHOW CREATE FLIGHT FORM
@@ -783,8 +788,9 @@
         $('#create_flight_form').show();
     });
 
-    // CREATE FLIGHT
 
+
+    // CREATE FLIGHT
     $(document).on("click","#btn_create_flight", function() {
         var flight_no = $('#create_flight_form #flight_no').val();
         var flight_from = $('#create_flight_form #cities_from option:selected').attr('data-code');
@@ -904,6 +910,7 @@
         });
     });
 
+
     //GO BACK TO FLIGHTS LIST FROM PASSENGER LIST
     $(document).on("click","#btn_back_to_flights", function() {
         $('#passengers_table').animate({"opacity": 0, "margin-top": "-=30px"}, 300 , function(){
@@ -912,6 +919,8 @@
             $('#admin_flights_table').animate({"opacity": 1, "margin-top": "+=30px"}, 300);
         });
     });
+
+
 
     function getAllAdminFlights(){
         $.ajax('ajax.php', {
@@ -936,6 +945,26 @@
             }
         }).fail(function(response) {
             console.log(response);
+        });
+    }
+
+
+    function getAirports(append_from, append_to){
+        $.ajax('ajax.php', {
+            data: {"action":"get_airports"},
+            dataType: 'json'
+        }).done(function(response){
+            $(append_from).html('');
+            $(append_to).html('');
+            console.log(response);
+            for (var i=0; i<response.length; i++) {
+                var city = '<option data-city="'+response[i].city_name+'" data-code="'+ response[i].code +'">'+ response[i].city_name + ' ' + response[i].code + '</option>';
+                $(append_from).append(city);
+                $(append_to).append(city);
+            }
+
+        }).fail(function(response){
+
         });
     }
 

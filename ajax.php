@@ -112,6 +112,11 @@
         getAirports();
     }
 
+    if($action == 'generate_flights') {
+        generateFlights();
+    }
+
+
 
 
 ?>

@@ -25,7 +25,7 @@
         if (isset($_SESSION['user'])) {
             unset($_SESSION['user']);
             session_destroy();
-            echo '{"result":"user has logged out"}';
+            echo '{"result":"ok"}';
         }else {
             echo '{"result":"error"}';
         }
@@ -392,6 +392,51 @@
         $result = $query->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($result);
     }
+
+
+
+    // INSERT FLIGHTS INTO TABLE
+
+    function generateFlights() {
+        include 'db.php';
+        $cities = array('MAD','SIN','OTP','OSL', 'ARD', 'SXF', 'VHA');
+        $random_key = array_rand($cities, 1);
+        $random_city = $cities[$random_key];
+//        echo $random_city;
+
+        // random date for this month and last month: -30, 30
+        $random_date = date('Y-m-d', strtotime( '+'.mt_rand(-30,30).' days')); //need to generate datetime not jus date . H:i:s ,
+//        echo $random_date;
+
+        $price = array('120','140','220','80', '110');
+        $random_key = array_rand($price, 1);
+        $random_price = $price[$random_key];
+//        echo $random_price;
+
+        $seats = (rand(10, 50));
+//        echo $seats;
+
+        $flight_no = substr(md5(rand()), 0, 5);
+//         echo $flight_no;
+
+        $query = $conn->prepare("INSERT INTO flights
+                          VALUES (null, :fl_no, :rand_city1, :rand_city2, :rand_date1, :rand_date2, :rand_price, :rand_seats1, :rand_seats2)");
+
+        $query->bindParam(':fl_no', $flight_no);
+        $query->bindParam(':rand_city1', $random_city);
+        $query->bindParam(':rand_city2', $random_city);
+        $query->bindParam(':rand_date1', $random_date);
+        $query->bindParam(':rand_date2', $random_date);
+        $query->bindParam(':rand_price', $random_price);
+        $query->bindParam(':rand_seats1', $seats);
+        $query->bindParam(':rand_seats2', $seats);
+
+        $query->execute();
+        echo '{"result":"ok"}';
+
+    }
+
+
 
 ?>
 

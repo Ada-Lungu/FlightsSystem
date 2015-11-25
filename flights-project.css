@@ -71,7 +71,33 @@
     /*color: white;*/
 /*}*/
 
-/*.container-fluid {*/
-    /*color: white;*/
-    /*background-color: rgb(226, 49, 48);*/
-/*}*/
+#background-img {
+    /*background: url('img/map-flights.jpg') no-repeat center center fixed;*/
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+
+.container-fluid {
+    color: white;
+    font-family: "Open Sans", sans-serif;
+    background-color: rgb(238, 238, 238);
+    border: 3px solid rgb(238, 238, 238);
+    /*padding-top: 10px;*/
+}
+
+.menu_item {
+    padding-top: 40px;
+}
+
+.navbar-inverse {
+    background-color: rgb(238, 238, 238);
+    height: 70px;
+}
+
+.navbar-nav {
+    background-color; red;
+}
+
