@@ -1,0 +1,27 @@
+YUI.Env.JSONP.yui_3_16_0_1_1448540852329_17352({
+   "ads" : [
+      {
+         "beacon" : "https://beap.gemini.yahoo.com/mbcsc?bv=1.0.0&es=7Zq2w1IGIS.7dDxAnNAHpU_ky8LF.xePZvH2jVhwQpAyT1iu3.r.hWXfz2wh01FBuEPriusTf_GzEDKGWKZOEt7.jdbVjNJ6msj0qwve.aRLvcAfzhRQhHGJ9hvnntmV8l9siesEo2i0ppslhEFeLhpqSQzzLnvVX4cFLsXstZjzt0fRCQgbruImwlQLqy2MIEDeWBiCygFEkKt7mNoF9C85URXYoIuzeCOFg_LjpzKm4DgV5O7YyXggFJ7fbZ1EhZBvqR1SmO3zwZEfqZrR4ZmqDYuhnmCGSJLGy4SYfCec4LsDjzSFiIzZBR3_DpKeSYF6VQ5YFtHtIUnu64fN_Di.vOdIMBZOd1NoZNX8anH1Kly7ux1PdDTYvJWsSHa7s90-&ap=$(AD_POSN)",
+         "bidUSD" : 0.130,
+         "ccCode" : "STRM",
+         "clickProbability" : 0.003832174082290715,
+         "creativeId" : 31476113692,
+         "displayUrl" : "http://l.yimg.com/av/curveball/ads/pr/RESIZE/82x82/a62b2612f7e9f893d5a40d17dba52171.jpeg",
+         "index" : 1,
+         "landingPageUrl" : "http://angel-investing.net/?campaign=582&u1=yahoo&u2=angel_finance_bills",
+         "sponsoredBy" : "Angel Investing",
+         "tag" : "{\"clickUrl\":\"https://beap.gemini.yahoo.com/mbclk?bv=1.0.0&es=7e9uph8GIS.IWpdmysM1kjCUfEZ.HvJueyyNsEtvAVc3lPdzxXeL0nDQYKKmVmynuMBKhm1Are_07vBbaJUnwKKpVD4z4F5tkl3Mvux6N3g7GcMiywPalqaHQo5w2Mz4jDfRDuYPjCDVmxu8Bi0pchmwDeQNhLBQcSlMXIvx0zA.5oqNjL3IRhPbYIo1sxzwSPHawTYyESQEGwL6G_9gQht_HB1YnLTPfUt3b2DRJCXNxnFzpbjl75AAbysy5YCDkUaa.O1U5P_6S8c0AOS8Hzo0OBuKD0zOu47koJ8imJg5Dm7HWygnqWkFlpWI6eGE8E5LnFU1PbbxWT0MdGVPW8cciAMoSjORUZqDB53a16mb6UL9xQ3sNn.qLVv88JS9Kji2y2Gl75U_NDaRFCq8.6JRpXxOvpxfrZPF_B.e.dYOoojK2DKjE26ySSYvWs36bGKExyXjXNmweB104PdQ4PqCRn84ViHgKMwsarukTLqS0a8yemI1a.X2H9M-%26lp=\",\"headline\":\"How Small Investment Can Deliver Gigantic Return!\",\"summary\":\"Discover A New Form Of Investing That Can Deliver Gigantic Returns!\",\"uuid\":\"31476113692\",\"source\":\"Angel Investing\",\"landingUrl\":\"http://angel-investing.net/?campaign=582&u1=yahoo&u2=angel_finance_bills\",\"ad_feedback_beacon\":\"https://us.af.beap.bc.yahoo.com/af?bv=1.0.0&bs=(15uadg7t4(gid$2707d3d0-9439-11e5-8faf-9b0aab7ee5fc-7f76f0b7a700,st$1448540889375000,li$0,cr$31476113692,dmn$angel-investing.net,srv$3,exp$1448548089375000,ct$27,v$1.0,adv$1278140,pbid$1,seid$4964388))&r=1448540889375&al=$(AD_FEEDBACK)\",\"advertiser_id\":\"1278140\",\"objective\":\"VISIT_WEB\",\"passThroughFields\":\"\",\"image\":\"http://l.yimg.com/av/curveball/ads/pr/RESIZE/82x82/a62b2612f7e9f893d5a40d17dba52171.jpeg\",\"hqImage\":\"http://l.yimg.com/av/curveball/ads/pr/RESIZE_AND_CROP/1200x627/f533e9109ff9757db0f550f6146a9fd2.jpeg\",\"origImg\":\"https://s.yimg.com/av/moneyball/ads/1448451822341-4973.jpg\",\"secImage\":\"https://s.yimg.com/av/curveball/ads/pr/RESIZE/82x82/a62b2612f7e9f893d5a40d17dba52171.jpeg\",\"secHqImage\":\"https://s.yimg.com/av/curveball/ads/pr/RESIZE_AND_CROP/1200x627/f533e9109ff9757db0f550f6146a9fd2.jpeg\",\"secOrigImg\":\"https://s.yimg.com/av/moneyball/ads/1448451822341-4973.jpg\",\"imageHeight\":82,\"imageWidth\":82,\"hqImageHeight\":627,\"hqImageWidth\":1200,\"origImgHeight\":679,\"origImgWidth\":679}"
+      }
+   ],
+   "adsRequested" : 8,
+   "adserverLatency" : 1.000000000000000e-05,
+   "section" : {
+      "id" : 4964388
+   },
+   "serverIp" : "fe21.cbs.cb.bf1.yahoo.com",
+   "status" : "0",
+   "totalAds" : 1,
+   "totalLatency" : 0.0237980,
+   "userCountry" : "DK",
+   "version" : "2"
+})

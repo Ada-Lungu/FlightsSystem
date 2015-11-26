@@ -116,7 +116,12 @@
         generateFlights();
     }
 
+    if($action == 'send_sms') {
+        sendSMS($_GET['flight_id']);
+    }
 
-
+    if($action=="generatePassengers"){
+        generatePassengers(100);
+    }
 
 ?>

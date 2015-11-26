@@ -1,53 +1,48 @@
-<!-- HEADER-->
 <div class="component page-header admin_header">
-    <h1>Admin Playground</h1>
-
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-default" id="admin_navbar">
+
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">HOME</a>
-            </div>
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">HOME</a>
+                </div>
 
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li id="settings_header" data-item="admin_settings" class="menu_item" style="display: none;"><a href="#">SETTINGS</a></li>
+
+                        <li id="settings_header" data-item="admin_settings"><a href="#">SETTINGS</a></li>
+
+                        <li class="dropdown">
+
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">FLIGHTS<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li id="show_create_flight_form"><a href="#">Create Flight</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li id="list_flights"><a href="#">List all flights</a></li>
+                            </ul>
+                        </li>
 
                     </ul>
 
-                    <li class="dropdown">
 
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">FLIGHTS<span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                            <li id="show_create_flight_form"><a href="#">Create Flight</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li id="list_flights"><a href="#">List all flights</a></li>
-                        </ul>
-                    </li>
-
-                </ul>
-
-
-                <ul class="nav navbar-nav navbar-right">
-                    <li id="username_header"></li>
-                    <li id="sign_up_header"><a href="#"><span class="glyphicon glyphicon-user"></span><span class="text"> Sign Up </a></li>
-                    <li id="login_header" data-button="login"><a href="#"><span class="glyphicon glyphicon-log-in"></span><span class="text"> Login </span></a></li>
-                </ul>
-
-            </div><!-- /.navbar-collapse -->
+                    <ul class="nav navbar-nav navbar-right">
+                        <li id="username_header"></li>
+                        <li id="sign_up_header"><a href="#"><span class="glyphicon glyphicon-user"></span><span class="text"> Sign Up </a></li>
+                        <li id="login_header" data-button="login"><a href="#"><span class="glyphicon glyphicon-log-in"></span><span class="text"> Login </span></a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div>
         </div><!-- /.container-fluid -->
     </nav>
-
 </div>

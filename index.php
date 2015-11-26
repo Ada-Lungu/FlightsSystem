@@ -66,7 +66,7 @@
         <?php include 'components/passengers-table.html'; ?>
     </div>
 
-    <img id="background-img" src="http://thumbs.dreamstime.com/z/world-travel-map-air-planes-illustration-36073514.jpg">
+<!--    <img id="background-img" src="http://thumbs.dreamstime.com/z/world-travel-map-air-planes-illustration-36073514.jpg">-->
 
 <!--    <div class="view container" id="create_flight" style="display: none">-->
 <!--        --><?php //include 'components/create_flight.html'; ?>
@@ -111,7 +111,12 @@
                 console.log(response);
                 $('.menu_item').show();
                 $('#login_header .text').html('Log Out');
-                $('#login_header').attr('data-button', 'logout');
+                $('.admin_header #login_header').attr('data-button', 'logout');
+                $('#user_header').hide();
+                $('.admin_header').show();
+                $('#search_flights').hide();
+                $('#admin_flights').show();
+                getAllAdminFlights();
             }
             else if(response.result == "ok" && response.is_admin == '0'){
 
@@ -186,6 +191,7 @@
     $(document).on('click', '#sign_up_header', function() {
         $('#sign_up_form').show();
         $('#search_flights').hide();
+        $('#login_form').hide();
 
     });
 
@@ -220,11 +226,13 @@
 
     $(document).on('click', '#login_header' , function() {
         var button_type = $(this).attr('data-button');
-        // if data-button is login
         if(button_type == 'login'){
             $('#login_form').show();
+            $('#home.view').show();
             $('#search_flights').hide();
-
+            $('#admin_flights').hide();
+            $('#sign_up_form').hide();
+            console.log('login');
         }
         // PERFORM LOGOUT
         else {
@@ -232,22 +240,27 @@
                 data: {"action":"logout"},
                 dataType: 'json'
             }).done(function(response) {
-
                 console.log(response.result);
 
 //               $('#login_header').show();
-                $('#sign_up_header').hide();
+
 
                 $('.menu_item').not('#home').hide();
                 $('*[data-item="home"]').show();
 
                 $('#search_flights').show();
-                $('#login_header').attr('data-button','login');
-                $('#login_header span.text').text('Login');
+                $('#user_header #login_header').attr('data-button','login');
+                $('.admin_header #login_header').attr('data-button','login');
+                $('#user_header #login_header span.text').text('Login');
+                $('.admin_header #login_header span.text').text('Login');
 
                 $('#edit_user_form').hide();
 
                 $('#logout_header').attr('id', '#login_header');
+                $('#admin_flights').hide();
+                $('.admin_header').hide();
+                $('#user_header').show();
+
 
                 // CHANGE logout button back to login button + attributes
                 // show the search flights form
@@ -266,6 +279,7 @@
 
     $(document).on('click', '#home_header', function() {
         $('#search_flights').show();
+        $('#login_form').hide();
     });
 
 
@@ -283,10 +297,14 @@
 
         }).done(function(response) {
 
-            $('#login_header .text').html('Log Out');
-            $('#login_header').attr('data-button', 'logout');
+
+            $('#user_header #login_header .text').html('Log Out');
+            $('.admin_header #login_header .text').html('Log Out');
+            $('#user_header #login_header').attr('data-button', 'logout');
+            $('.admin_header #login_header').attr('data-button', 'logout');
             $('#flights_table').hide();
             $('.menu_item').show();
+            $('#flights_header').show();
 
 
             // For Users
@@ -305,13 +323,17 @@
                     $('#payment_form').show();
 
                 }
+
             // For Admin
             }else{
                 console.log("User");
 
                 // change the id's for the header's elements
-                $('#header').hide();
+                $('#user_header').hide();
                 $('.admin_header').show();
+                $('#login_form').hide();
+                $('#admin_flights').show();
+                getAllAdminFlights();
 
 //                  $('#header #flights_header').attr('data-item','admin_flights');
 //                  $('#header #settings_header').attr('data-item','admin_settings');
@@ -405,6 +427,18 @@
             $('#ticket_info #departure_time span').text(' ' + response.departure_time);
             $('#ticket_info #arrival_time span').text(' ' + response.arrival_time);
 
+                // SEND SMS
+                $.ajax('ajax.php', {
+                    data: {"action": "send_sms", "flight_id": flight_id},
+                    dataType: 'json'
+                }).done(function(response) {
+                    console.log(response);
+
+                }).fail(function(response) {
+                    console.log(response);
+                });
+
+
         }).fail(function(response) {
             console.log(response);
         });
@@ -451,7 +485,6 @@
         }else{
             console.log('NO!');
         }
-
 
     });
 
@@ -554,7 +587,7 @@
             }
         })
 
-    })
+    });
 
 
     // create a function that sends to the main page => because it's used many times
@@ -984,6 +1017,11 @@
 
         }).done(function(response) {console.log(response)}).fail(function(response) {console.log(response)})
     }
+
+
+    //
+
+
 
 </script>
 

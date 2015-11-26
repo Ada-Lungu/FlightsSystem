@@ -164,7 +164,7 @@
             echo '{"result":"error"}';
         }
 
-    };
+    }
 
     function updateUserProfile($phone_num, $email) {
         include 'db.php';
@@ -222,12 +222,7 @@
         return $result;
     }
 
-    // CHECK IF USER IS ADMIN OR NOT
-    function is_user_admin() {
 
-
-
-    }
 
 
 
@@ -385,6 +380,7 @@
     }
 
 
+
     function getAirports(){
         include 'db.php';
         $query = $conn->prepare("SELECT * FROM airports");
@@ -399,44 +395,117 @@
 
     function generateFlights() {
         include 'db.php';
-        $cities = array('MAD','SIN','OTP','OSL', 'ARD', 'SXF', 'VHA');
-        $random_key = array_rand($cities, 1);
-        $random_city = $cities[$random_key];
-//        echo $random_city;
 
-        // random date for this month and last month: -30, 30
-        $random_date = date('Y-m-d', strtotime( '+'.mt_rand(-30,30).' days')); //need to generate datetime not jus date . H:i:s ,
-//        echo $random_date;
+    for ($i = 0; count(20); $i++) {
+            $cities = array('MAD','SIN','OTP','OSL', 'ARD', 'SXF', 'VHA');
+            $random_key = array_rand($cities, 2);
+            $random_city1 = $cities[$random_key[0]];
+            $random_city2 = $cities[$random_key[1]];
+            echo $random_city1;
+            echo $random_city2;
 
-        $price = array('120','140','220','80', '110');
-        $random_key = array_rand($price, 1);
-        $random_price = $price[$random_key];
-//        echo $random_price;
+            // random date for this month and last month: -30, 30
+            $random_date = date('Y-m-d', strtotime( '+'.mt_rand(0,30).' days')); //need to generate datetime not jus date . H:i:s ,
+            echo $random_date;
 
-        $seats = (rand(10, 50));
-//        echo $seats;
+            $price = array('120','140','220','80', '110');
+            $random_key = array_rand($price, 1);
+            $random_price = $price[$random_key];
+    //        echo $random_price;
 
-        $flight_no = substr(md5(rand()), 0, 5);
-//         echo $flight_no;
+            $economy_seats = (rand(10, 50));
+            $business_seats = (rand(7, 30));
+    //        echo $seats;
 
-        $query = $conn->prepare("INSERT INTO flights
-                          VALUES (null, :fl_no, :rand_city1, :rand_city2, :rand_date1, :rand_date2, :rand_price, :rand_seats1, :rand_seats2)");
+            $flight_no = substr(md5(rand()), 0, 5);
+    //         echo $flight_no;
 
-        $query->bindParam(':fl_no', $flight_no);
-        $query->bindParam(':rand_city1', $random_city);
-        $query->bindParam(':rand_city2', $random_city);
-        $query->bindParam(':rand_date1', $random_date);
-        $query->bindParam(':rand_date2', $random_date);
-        $query->bindParam(':rand_price', $random_price);
-        $query->bindParam(':rand_seats1', $seats);
-        $query->bindParam(':rand_seats2', $seats);
+            $query = $conn->prepare("INSERT INTO flights
+                              VALUES (null, :fl_no, :rand_city1, :rand_city2, :rand_date1, :rand_date2, :rand_price, :rand_seats1, :rand_seats2)");
 
-        $query->execute();
+            $query->bindParam(':fl_no', $flight_no);
+            $query->bindParam(':rand_city1', $random_city1);
+            $query->bindParam(':rand_city2', $random_city2);
+            $query->bindParam(':rand_date1', $random_date);
+            $query->bindParam(':rand_date2', $random_date);
+            $query->bindParam(':rand_price', $random_price);
+            $query->bindParam(':rand_seats1', $economy_seats);
+            $query->bindParam(':rand_seats2', $business_seats);
+
+            $query->execute();
+        }
+
         echo '{"result":"ok"}';
 
     }
 
 
+    // SEND SMS TO USERS
+
+    function sendSMS($flight_id)
+    {
+        include 'db.php';
+        $query = $conn->prepare ("SELECT flight_no, flight_from, flight_to, departure_time FROM flights WHERE id = :flight_id");
+        $query->bindParam(':flight_id', $flight_id);
+        $query->execute();
+        $flight_infos = $query->fetchAll(PDO::FETCH_ASSOC);
+        var_dump($flight_infos);
+
+
+        $flight_no = $flight_infos[0]['flight_no'];
+        $flight_from = $flight_infos[0]['flight_from'];
+        $flight_to = $flight_infos[0]['flight_to'];
+        $departure_time = $flight_infos[0]['departure_time'];
+        echo "$flight_no, $flight_from, $flight_to, $departure_time";
+
+
+//       $user_id = getUserId();
+        $user_data = getUserData();
+        var_dump($user_data);
+
+        $user_first_name = $user_data[0]['first_name'];
+        echo $user_first_name;
+        $user_last_name = $user_data[0]['last_name'];
+        $user_phone_num = $user_data[0]['phone_num'];
+//        $user_email = $user_data[0]['email'];
+
+
+        $key = 'ODIz-MzVl-NzVh-ODFl-NTcy-OThm-ZmJi-M2Ix-MDMx-MTI2-MzM2';
+        $message = urlencode("Dear $user_first_name $user_last_name.Thanks for flying with us. Your flight with the id $flight_id, flying from $flight_from to  $flight_to
+                              will be departuring on $departure_time . Enjoy your flight."); // make the phrase URL friendly
+        $sUrl = "http://ecuanota.com/api-send-sms"; // point to this URL
+        $sLink = $sUrl."?key=".$key."&mobile=".$user_phone_num."&message=".$message; // create the SMS
+        file_get_contents($sLink); // send the SMS
+        // echo file_get_contents($sLink); // to see the JSON response from the server
+
+
+    }
+
+
+    // GENERATE PASSENGERS
+    function generatePassengers($howmany){
+        include 'db.php';
+        $query = $conn->prepare("SELECT id from USERS");
+        $query->execute();
+        $passengers = $query->fetchAll(PDO::FETCH_COLUMN, 0);
+
+        $query = $conn->prepare("SELECT id from FLIGHTS");
+        $query->execute();
+        $flights = $query->fetchAll(PDO::FETCH_COLUMN, 0);
+
+        //$query = $conn->prepare(INSERT INTO bookings VALUES(null, $passenger, $flight, 1));
+        //$query->execute();
+
+       for($i = 0; $i<$howmany; $i++){
+           $passenger = $passengers[rand(0, count($passengers) - 1)];
+           $flight = $flights[rand(0, count($flights) - 1)];
+
+           $query = $conn->prepare("INSERT INTO bookings VALUES(null, $passenger, $flight, 1)");
+           $query->execute();
+
+       }
+
+    }
 
 ?>
 
